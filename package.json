@@ -72,7 +72,7 @@
         "@react-native/typescript-config": "0.74.84",
         "@release-it/conventional-changelog": "^8.0.2",
         "@testing-library/jest-native": "^5.4.3",
-        "@testing-library/react-native": "^12.5.1",
+        "@testing-library/react-native": "^13.3.3",
         "@types/jest": "^29.5.14",
         "@types/react": "^18.3.3",
         "@types/react-native": "^0.69.5",
