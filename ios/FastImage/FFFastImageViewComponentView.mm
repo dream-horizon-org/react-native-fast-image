@@ -102,6 +102,18 @@ using namespace facebook::react;
 
     fastImageView.imageColor = RCTUIColorFromSharedColor(newViewProps.tintColor);
 
+    NSString *transition = @"none";
+    switch (newViewProps.transition) {
+        case FastImageViewTransition::Fade:
+            transition = @"fade";
+            break;
+        case FastImageViewTransition::None:
+        default:
+            transition = @"none";
+            break;
+    }
+    fastImageView.transition = transition;
+
     [super updateProps:props oldProps:oldProps];
     // this method decides whether to reload the image based on changed props
     // so we call it after updating the props. If the _eventEmitter is not present yet,

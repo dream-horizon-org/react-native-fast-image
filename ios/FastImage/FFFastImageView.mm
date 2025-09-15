@@ -290,6 +290,10 @@ static NSString * const kFFFastImageDefaultErrorMessage = @"Load failed";
 
 - (void) downloadImage: (FFFastImageSource*)source options: (SDWebImageOptions)options context: (SDWebImageContext*)context {
     __weak FFFastImageView *weakSelf = self; // Always use a weak reference to self in blocks
+    // transition: default to none; enable fade if requested
+    if (self.transition && [self.transition isEqualToString:@"fade"]) {
+        self.sd_imageTransition = SDWebImageTransition.fadeTransition;
+    }
     [self sd_setImageWithURL: _source.url
             placeholderImage: _defaultSource
                      options: options

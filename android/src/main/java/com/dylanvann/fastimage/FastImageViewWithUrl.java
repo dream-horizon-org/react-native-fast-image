@@ -14,6 +14,7 @@ import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.request.Request;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.facebook.react.bridge.ReadableMap;
 import com.dylanvann.fastimage.events.FastImageErrorEvent;
@@ -34,6 +35,7 @@ class FastImageViewWithUrl extends AppCompatImageView {
     private ReadableMap mSource = null;
     private Drawable mDefaultSource = null;
     public GlideUrl glideUrl;
+    private String mTransition = "none"; // "none" | "fade"
 
     public FastImageViewWithUrl(Context context) {
         super(context);
@@ -47,6 +49,15 @@ class FastImageViewWithUrl extends AppCompatImageView {
     public void setDefaultSource(@Nullable Drawable source) {
         mNeedsReload = true;
         mDefaultSource = source;
+    }
+
+    public void setTransition(@Nullable String transition) {
+        mNeedsReload = true;
+        if (transition == null) {
+            mTransition = "none";
+        } else {
+            mTransition = transition;
+        }
     }
 
     private boolean isNullOrEmpty(final String url) {
@@ -155,6 +166,10 @@ class FastImageViewWithUrl extends AppCompatImageView {
 
                 if (key != null) {
                     builder.listener(new FastImageRequestListener(key));
+                }
+
+                if ("fade".equals(mTransition)) {
+                    builder = builder.transition(DrawableTransitionOptions.withCrossFade());
                 }
 
                 builder.into(this);

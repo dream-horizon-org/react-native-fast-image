@@ -45,6 +45,13 @@ const priority = {
     high: 'high',
 } as const
 
+export type Transition = 'fade' | 'none'
+
+const transition = {
+    fade: 'fade',
+    none: 'none',
+} as const
+
 type Cache = 'immutable' | 'web' | 'cacheOnly'
 
 const cacheControl = {
@@ -102,6 +109,7 @@ export interface FastImageProps extends AccessibilityProps, ViewProps {
     defaultSource?: ImageRequireSource
     resizeMode?: ResizeMode
     fallback?: boolean
+    transition?: Transition
 
     onLoadStart?(): void
 
@@ -182,8 +190,8 @@ function FastImageBase({
     style,
     fallback,
     children,
-
-    resizeMode = 'cover',
+    transition: transitionProp,
+    resizeMode: resizeModeProp = 'cover',
     forwardedRef,
     ...props
 }: FastImageProps & { forwardedRef: React.Ref<any> }) {
@@ -204,7 +212,7 @@ function FastImageBase({
                     onLoad={onLoad as any}
                     onError={onError}
                     onLoadEnd={onLoadEnd}
-                    resizeMode={resizeMode}
+                    resizeMode={resizeModeProp}
                 />
                 {children}
             </View>
@@ -248,7 +256,8 @@ function FastImageBase({
                 onFastImageLoad={onLoad}
                 onFastImageError={onError}
                 onFastImageLoadEnd={onLoadEnd}
-                resizeMode={resizeMode}
+                resizeMode={resizeModeProp}
+                transition={transitionProp}
             />
             {children}
         </View>
@@ -269,6 +278,7 @@ export interface FastImageStaticProperties {
     resizeMode: typeof resizeMode
     priority: typeof priority
     cacheControl: typeof cacheControl
+    transition: typeof transition
     preload: (sources: Source[]) => void
     clearMemoryCache: () => Promise<void>
     clearDiskCache: () => Promise<void>
@@ -282,6 +292,8 @@ FastImage.resizeMode = resizeMode
 FastImage.cacheControl = cacheControl
 
 FastImage.priority = priority
+
+FastImage.transition = transition
 
 FastImage.preload = (sources: Source[]) => FastImageViewModule.preload(sources)
 

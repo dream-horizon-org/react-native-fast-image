@@ -101,6 +101,12 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
     }
 
     @Override
+    @ReactProp(name = "transition")
+    public void setTransition(FastImageViewWithUrl view, @Nullable String transition) {
+        view.setTransition(transition);
+    }
+
+    @Override
     public void onDropViewInstance(@NonNull FastImageViewWithUrl view) {
         // This will cancel existing requests.
         view.clearView(requestManager);

@@ -10,6 +10,7 @@ import type {
 type Headers = ReadonlyArray<Readonly<{ name: string; value: string }>>
 type Priority = WithDefault<'low' | 'normal' | 'high', 'normal'>
 type CacheControl = WithDefault<'immutable' | 'web' | 'cacheOnly', 'web'>
+type Transition = WithDefault<'fade' | 'none', 'none'>
 
 type FastImageSource = Readonly<{
     uri?: string
@@ -45,6 +46,7 @@ interface NativeProps extends ViewProps {
         'cover'
     >
     tintColor?: ColorValue
+    transition?: Transition
 }
 
 export default codegenNativeComponent<NativeProps>('FastImageView')
