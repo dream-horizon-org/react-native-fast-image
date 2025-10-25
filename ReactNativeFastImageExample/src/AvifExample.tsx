@@ -6,9 +6,9 @@ import Section from './Section';
 import SectionFlex from './SectionFlex';
 import {useCacheBust} from './useCacheBust';
 
-const TRANSPARENT_AVIF_URL = 'https://raw.githubusercontent.com/dream-sports-labs/react-native-fast-image/248b099e54a382f58c2549796cf17ee2bd0e369a/ReactNativeFastImageExampleServer/pictures/shade.avif';
+const TRANSPARENT_AVIF_URL = 'https://raw.githubusercontent.com/ds-horizon/react-native-fast-image/248b099e54a382f58c2549796cf17ee2bd0e369a/ReactNativeFastImageExampleServer/pictures/shade.avif';
 
-const ANIMATED_AVIF_URL = 'https://raw.githubusercontent.com/dream-sports-labs/react-native-fast-image/d1b67604d520c585025bac257a2c815fd676a2c6/ReactNativeFastImageExampleServer/pictures/animated.avif';
+const ANIMATED_AVIF_URL = 'https://raw.githubusercontent.com/ds-horizon/react-native-fast-image/d1b67604d520c585025bac257a2c815fd676a2c6/ReactNativeFastImageExampleServer/pictures/animated.avif';
 
 export const AvifExample = () => {
   const {url: transparentUrl, bust: bustTransparentUrl} =

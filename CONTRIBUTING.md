@@ -18,7 +18,7 @@ cd react-native-fast-image
 ```
 3. Add the upstream repository as a remote:
 ```bash
-git remote add upstream https://github.com/dream-sports-labs/react-native-fast-image.git
+git remote add upstream https://github.com/ds-horizon/react-native-fast-image.git
 ```
 
 ### Development Environment Setup
