@@ -4,8 +4,11 @@
 #import "RCTConvert+FFFastImage.h"
 #import "FFFastImageView.h"
 
+#import <React/RCTConvert.h>
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
+#import <React/RCTImageSource.h>
+#import <React/RCTUtils.h>
 #import <react/renderer/components/RNFastImageSpec/ComponentDescriptors.h>
 #import <react/renderer/components/RNFastImageSpec/Props.h>
 #import <react/renderer/components/RNFastImageSpec/EventEmitters.h>
@@ -115,6 +118,16 @@ using namespace facebook::react;
             break;
     }
     fastImageView.transition = transition;
+    
+    // Handle defaultSource
+    NSString *defaultSourceString = RCTNSStringFromStringNilIfEmpty(newViewProps.defaultSource);
+    
+    if (defaultSourceString && defaultSourceString.length > 0) {
+        UIImage *defaultImage = [RCTConvert UIImage:@{@"uri": defaultSourceString,@"__packager_asset": @YES}];
+        [fastImageView setDefaultSource:defaultImage];
+    }
+    
+
 
     [super updateProps:props oldProps:oldProps];
     // this method decides whether to reload the image based on changed props
