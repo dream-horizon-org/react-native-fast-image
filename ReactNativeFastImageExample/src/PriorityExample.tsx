@@ -1,10 +1,10 @@
 import React from 'react';
-import {PixelRatio, StyleSheet, View} from 'react-native';
+import { PixelRatio, StyleSheet, View } from 'react-native';
 import FastImage from '@d11/react-native-fast-image';
 import Section from './Section';
 import SectionFlex from './SectionFlex';
 import FeatureText from './FeatureText';
-import {useCacheBust} from './useCacheBust';
+import { useCacheBust } from './useCacheBust';
 
 const getImageUrl = (id: string, width: number, height: number) =>
   `https://unsplash.it/${width}/${height}?image=${id}`;
@@ -17,7 +17,7 @@ const IMAGE_URLS = [
 ];
 
 export const PriorityExample = () => {
-  const {query, bust} = useCacheBust('');
+  const { query, bust } = useCacheBust('');
   return (
     <View>
       <Section>
@@ -26,10 +26,8 @@ export const PriorityExample = () => {
       <SectionFlex onPress={bust}>
         <FastImage
           style={styles.image}
-          source={{
-            uri: IMAGE_URLS[0] + query.replace('?', '&'),
-            priority: FastImage.priority.low,
-          }}
+          source={require('./images/logo.png')}
+          defaultSource={require('./images/logo.png')}
         />
         <FastImage
           style={styles.image}

@@ -123,8 +123,10 @@ using namespace facebook::react;
     NSString *defaultSourceString = RCTNSStringFromStringNilIfEmpty(newViewProps.defaultSource);
     
     if (defaultSourceString && defaultSourceString.length > 0) {
-        UIImage *defaultImage = [RCTConvert UIImage:@{@"uri": defaultSourceString,@"__packager_asset": @YES}];
-        [fastImageView setDefaultSource:defaultImage];
+        if([[defaultSourceString lowercaseString] hasPrefix:@"http"]){
+            UIImage *defaultImage = [RCTConvert UIImage:@{@"uri": defaultSourceString,@"__packager_asset": @YES}];
+            [fastImageView setDefaultSource:defaultImage];
+        }
     }
     
 
