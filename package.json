@@ -70,7 +70,7 @@
         "@react-native/eslint-config": "0.74.84",
         "@react-native/metro-config": "0.78.2",
         "@react-native/typescript-config": "0.74.84",
-        "@release-it/conventional-changelog": "^8.0.2",
+        "@release-it/conventional-changelog": "^10.0.1",
         "@testing-library/jest-native": "^5.4.3",
         "@testing-library/react-native": "^12.5.1",
         "@types/jest": "^29.5.14",
