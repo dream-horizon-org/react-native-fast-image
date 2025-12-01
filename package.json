@@ -18,7 +18,7 @@
         "url": "https://github.com/dream-horizon-org/react-native-fast-image.git"
     },
     "license": "(MIT AND Apache-2.0)",
-    "author": "DreamHorizon <dreamhorizon@dream11.com> (https://github.com/dream-horizon-org)",
+    "author": "DreamHorizon <info@dreamhorizon.org> (https://github.com/dream-horizon-org)",
     "main": "src/index",
     "module": "src/index",
     "source": "src/index",
