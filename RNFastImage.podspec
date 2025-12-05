@@ -9,12 +9,12 @@ Pod::Spec.new do |s|
   s.name          = "RNFastImage"
   s.version       = package['version']
   s.summary       = package['description']
-  s.authors       = { "Dylan Vann" => "dylan@dylanvann.com" }
-  s.homepage      = "https://github.com/DylanVann/react-native-fast-image#readme"
+  s.authors       = { "Dream Horizon" => "info@dreamhorizon.org" }
+  s.homepage      = "https://github.com/dream-horizon-org/react-native-fast-image#readme"
   s.license       = "MIT"
   s.framework = 'UIKit'
   s.requires_arc  = true
-  s.source        = { :git => "https://github.com/DylanVann/react-native-fast-image.git", :tag => "v#{s.version}" }
+  s.source        = { :git => "https://github.com/dream-horizon-org/react-native-fast-image.git", :tag => "v#{s.version}" }
   if fabric_enabled
     folly_compiler_flags = '-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_CFG_NO_COROUTINES=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32'
 
