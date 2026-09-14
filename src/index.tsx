@@ -4,11 +4,9 @@ import {
     Image,
     NativeModules,
     StyleSheet,
-    FlexStyle,
     LayoutChangeEvent,
-    ShadowStyleIOS,
     StyleProp,
-    TransformsStyle,
+    ImageStyle as RNImageStyle,
     ImageRequireSource,
     Platform,
     AccessibilityProps,
@@ -90,7 +88,7 @@ export interface OnErrorEvent {
     }
 }
 
-export interface ImageStyle extends FlexStyle, TransformsStyle, ShadowStyleIOS {
+export interface ImageStyle extends RNImageStyle {
     backfaceVisibility?: 'visible' | 'hidden'
     borderBottomLeftRadius?: number
     borderBottomRightRadius?: number
