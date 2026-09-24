@@ -194,7 +194,7 @@ class FastImageViewWithUrl extends AppCompatImageView {
     }
 
     public void clearView(@Nullable RequestManager requestManager) {
-        if (requestManager != null && getTag() != null && getTag() instanceof Request) {
+        if (requestManager != null) {
             requestManager.clear(this);
         }
     }
