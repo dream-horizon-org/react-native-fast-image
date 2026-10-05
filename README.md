@@ -129,18 +129,9 @@ If you're already using Glide and an `AppGlideModule`, [read this guide](docs/ap
 
 ## 🛡️ ProGuard Config
 
-If using [ProGuard](https://www.guardsquare.com/proguard), add these rules to `android/app/proguard-rules.pro`:
+The ProGuard/R8 rules FastImage needs ship with the library (`android/consumer-rules.pro`), and the Android Gradle plugin applies them to your release build automatically. You don't need to add them to `android/app/proguard-rules.pro`.
 
-```pro
--keep public class com.dylanvann.fastimage.* {*;}
--keep public class com.dylanvann.fastimage.** {*;}
--keep public class * implements com.bumptech.glide.module.GlideModule
--keep public class * extends com.bumptech.glide.module.AppGlideModule
--keep public enum com.bumptech.glide.load.ImageHeaderParser$** {
-  **[] $VALUES;
-  public *;
-}
-```
+If you copied the rules from an earlier version of this README, you can remove them. Without a constructor rule, R8's full mode (the default from Android Gradle plugin 8.0) removes the Glide modules' constructors and the app crashes at startup with `Unable to instantiate GlideModule implementation`.
 
 ## 📖 API Documentation
 
