@@ -3,6 +3,7 @@
 #import <CoreImage/CoreImage.h>
 #import <SDWebImage/UIImage+MultiFormat.h>
 #import <SDWebImage/UIView+WebCache.h>
+#import <SDWebImage/SDWebImageError.h>
 #import <SDWebImageAVIFCoder/SDImageAVIFCoder.h>
 #import <SDWebImageWebPCoder/SDImageWebPCoder.h>
 #if !defined(DISABLE_SVG) || DISABLE_SVG == 0
@@ -226,7 +227,7 @@ static NSString * const kFFFastImageDefaultErrorMessage = @"Load failed";
 }
 
 - (void) setSource: (FFFastImageSource*)source {
-    if (_source != source) {
+    if (_source != source && ![_source isEqual:source]) {
         _source = source;
         _needsReload = YES;
     }
@@ -325,6 +326,12 @@ static NSString * const kFFFastImageDefaultErrorMessage = @"Load failed";
                     NSError* _Nullable error,
                     SDImageCacheType cacheType,
                     NSURL* _Nullable imageURL) {
+                // A load superseded by a newer one (or by a recycle) completes with a
+                // cancellation error. It is not a failure of the current source, so it
+                // must not reach JS as onError.
+                if (error && [FFFastImageView isCancellationError:error]) {
+                    return;
+                }
                 if (error) {
                     weakSelf.hasErrored = YES;
                     [weakSelf onErrorEvent:error];
@@ -336,6 +343,11 @@ static NSString * const kFFFastImageDefaultErrorMessage = @"Load failed";
                     [weakSelf onLoadEndEvent];
                 }
             }];
+}
+
++ (BOOL) isCancellationError: (NSError*)error {
+    return ([error.domain isEqualToString:SDWebImageErrorDomain] && error.code == SDWebImageErrorCancelled) ||
+        ([error.domain isEqualToString:NSURLErrorDomain] && error.code == NSURLErrorCancelled);
 }
 
 - (void) dealloc {
