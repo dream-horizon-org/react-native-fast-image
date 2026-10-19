@@ -13,6 +13,7 @@ import com.facebook.react.modules.network.OkHttpClientProvider;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -77,8 +78,10 @@ public class FastImageOkHttpProgressGlideModule extends LibraryGlideModule {
     }
 
     private static class DispatchingProgressListener implements ResponseProgressListener {
-        private final Map<String, FastImageProgressListener> LISTENERS = new WeakHashMap<>();
-        private final Map<String, Long> PROGRESSES = new HashMap<>();
+        private final Map<String, FastImageProgressListener> LISTENERS =
+                Collections.synchronizedMap(new WeakHashMap<>());
+        private final Map<String, Long> PROGRESSES =
+                Collections.synchronizedMap(new HashMap<>());
 
         void forget(String key) {
             LISTENERS.remove(key);

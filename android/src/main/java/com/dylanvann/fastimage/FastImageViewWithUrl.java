@@ -21,11 +21,11 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.UIManagerHelper;
 import com.facebook.react.uimanager.events.EventDispatcher;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import android.os.Build;
 import android.util.Log;
@@ -77,7 +77,7 @@ class FastImageViewWithUrl extends AppCompatImageView {
     public void onAfterUpdate(
             @NonNull FastImageViewManager manager,
             @Nullable RequestManager requestManager,
-            @NonNull Map<String, List<FastImageViewWithUrl>> viewsForUrlsMap) {
+            @NonNull Map<String, List<WeakReference<FastImageViewWithUrl>>> viewsForUrlsMap) {
         if (!mNeedsReload)
             return;
 
@@ -131,6 +131,7 @@ class FastImageViewWithUrl extends AppCompatImageView {
 
         // `imageSource` may be null and we still continue, if `defaultSource` is not null
         final GlideUrl glideUrl = imageSource == null ? null : imageSource.getGlideUrl();
+        final String previousKey = this.glideUrl == null ? null : this.glideUrl.toStringUrl();
 
         // Cancel existing request.
         this.glideUrl = glideUrl;
@@ -140,12 +141,25 @@ class FastImageViewWithUrl extends AppCompatImageView {
 
         if (glideUrl != null) {
             FastImageOkHttpProgressGlideModule.expect(key, manager);
-            List<FastImageViewWithUrl> viewsForKey = viewsForUrlsMap.get(key);
-            if (viewsForKey != null && !viewsForKey.contains(this)) {
-                viewsForKey.add(this);
-            } else if (viewsForKey == null) {
-                List<FastImageViewWithUrl> newViewsForKeys = new ArrayList<>(Collections.singletonList(this));
-                viewsForUrlsMap.put(key, newViewsForKeys);
+            synchronized (viewsForUrlsMap) {
+                if (previousKey != null && !previousKey.equals(key)) {
+                    List<WeakReference<FastImageViewWithUrl>> previous = viewsForUrlsMap.get(previousKey);
+                    if (previous != null) {
+                        previous.removeIf(ref -> ref.get() == null || ref.get() == this);
+                        if (previous.isEmpty()) viewsForUrlsMap.remove(previousKey);
+                    }
+                }
+                List<WeakReference<FastImageViewWithUrl>> viewsForKey = viewsForUrlsMap.get(key);
+                if (viewsForKey == null) {
+                    viewsForKey = new CopyOnWriteArrayList<>();
+                    viewsForUrlsMap.put(key, viewsForKey);
+                }
+                viewsForKey.removeIf(ref -> ref.get() == null);
+                boolean registered = false;
+                for (WeakReference<FastImageViewWithUrl> ref : viewsForKey) {
+                    if (ref.get() == this) registered = true;
+                }
+                if (!registered) viewsForKey.add(new WeakReference<>(this));
             }
         }
 

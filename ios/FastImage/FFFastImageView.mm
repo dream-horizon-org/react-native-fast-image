@@ -320,7 +320,7 @@ static NSString * const kFFFastImageDefaultErrorMessage = @"Load failed";
                      options: options
                      context: context
                     progress: ^(NSInteger receivedSize, NSInteger expectedSize, NSURL* _Nullable targetURL) {
-        [self onProgressEvent:receivedSize expectedSize:expectedSize];
+        [weakSelf onProgressEvent:receivedSize expectedSize:expectedSize];
                     } completed: ^(UIImage* _Nullable image,
                     NSError* _Nullable error,
                     SDImageCacheType cacheType,
