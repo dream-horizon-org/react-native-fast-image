@@ -4,12 +4,10 @@ import {
     Image,
     NativeModules,
     StyleSheet,
-    FlexStyle,
     LayoutChangeEvent,
-    ShadowStyleIOS,
     StyleProp,
-    TransformsStyle,
     ImageRequireSource,
+    ImageStyle as RNImageStyle,
     Platform,
     AccessibilityProps,
     ViewProps,
@@ -90,19 +88,13 @@ export interface OnErrorEvent {
     }
 }
 
-export interface ImageStyle extends FlexStyle, TransformsStyle, ShadowStyleIOS {
-    backfaceVisibility?: 'visible' | 'hidden'
-    borderBottomLeftRadius?: number
-    borderBottomRightRadius?: number
-    backgroundColor?: string
-    borderColor?: string
-    borderWidth?: number
-    borderRadius?: number
-    borderTopLeftRadius?: number
-    borderTopRightRadius?: number
-    overlayColor?: string
-    opacity?: number
-}
+// Built from react-native's own `ImageStyle` instead of `FlexStyle` and
+// `ShadowStyleIOS`: react-native no longer exports those two from 0.87 on.
+// The omitted keys are the ones this type never had.
+export type ImageStyle = Omit<
+    RNImageStyle,
+    'resizeMode' | 'overflow' | 'tintColor' | 'objectFit'
+>
 
 export interface FastImageProps extends AccessibilityProps, ViewProps {
     source?: Source | ImageRequireSource
