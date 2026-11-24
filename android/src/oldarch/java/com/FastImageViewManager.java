@@ -9,6 +9,8 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.PorterDuff;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.NonNull;
 
@@ -39,6 +41,7 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
     static final String REACT_ON_LOAD_START_EVENT = "onFastImageLoadStart";
     static final String REACT_ON_PROGRESS_EVENT = "onFastImageProgress";
     private static final Map<String, List<FastImageViewWithUrl>> VIEWS_FOR_URLS = new WeakHashMap<>();
+    private static final Handler MAIN_HANDLER = new Handler(Looper.getMainLooper());
 
     @Nullable
     private RequestManager requestManager = null;
@@ -98,8 +101,12 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
 
     @Override
     public void onDropViewInstance(@NonNull FastImageViewWithUrl view) {
-        // This will cancel existing requests.
-        view.clearView(requestManager);
+        // This will cancel existing requests. The view can be dropped while Glide is delivering a
+        // result to it, and Glide throws if a load is cleared from inside one of its callbacks, so
+        // the clear runs on the next main thread message. `View.post` would not run here because
+        // the view is already detached.
+        final RequestManager dropRequestManager = requestManager;
+        MAIN_HANDLER.post(() -> view.clearView(dropRequestManager));
 
         if (view.glideUrl != null) {
             final String key = view.glideUrl.toString();

@@ -11,7 +11,6 @@ import androidx.appcompat.widget.AppCompatImageView;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.model.GlideUrl;
-import com.bumptech.glide.request.Request;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.facebook.react.bridge.ReadableMap;
@@ -132,9 +131,9 @@ class FastImageViewWithUrl extends AppCompatImageView {
         // `imageSource` may be null and we still continue, if `defaultSource` is not null
         final GlideUrl glideUrl = imageSource == null ? null : imageSource.getGlideUrl();
 
-        // Cancel existing request.
+        // The previous request is left to Glide: `into()` below keeps it when the new request is
+        // equivalent and clears it otherwise.
         this.glideUrl = glideUrl;
-        clearView(requestManager);
 
         String key = glideUrl == null ? null : glideUrl.toStringUrl();
 
@@ -194,7 +193,9 @@ class FastImageViewWithUrl extends AppCompatImageView {
     }
 
     public void clearView(@Nullable RequestManager requestManager) {
-        if (requestManager != null && getTag() != null && getTag() instanceof Request) {
+        // Glide stores the request under its own keyed view tag, so `getTag()` never returns it.
+        // `RequestManager.clear(View)` looks under that key and does nothing if there is no request.
+        if (requestManager != null) {
             requestManager.clear(this);
         }
     }
